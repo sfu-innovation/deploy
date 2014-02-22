@@ -1,11 +1,26 @@
 
 var https = require('https'),
-	proxy = require('http-proxy').createProxyServer({ target: });
+	proxy = require('http-proxy');
 
 
-var proxies = [
-	{ match: { path: /^\/474/ }, proxy: proxy.createProxyServer({ target: { host: 'localhost', port: 1888 }}) }
-];
+var proxies = [ ];
+proxies.index = { };
+
+function register(entry) {
+	var index = proxies.length;
+	proxies.push({
+		id: entry.id,
+		match: entry.match,
+		proxy: proxy.createProxyServer({ target: entry.target })
+	});
+	proxies.index[entry.id] = { index: index, value: entry };
+}
+
+function unregister(id) {
+	if (!proxies.index[id]) return;
+	proxies.splice(proxies.index[id].index, 1);
+	delete proxies.index[id];
+}
 
 function find(req) {
 	return proxies.filter(function(proxy) {

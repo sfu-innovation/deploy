@@ -74,7 +74,7 @@ function deploy(entry) {
 					max: os.cpus.length,
 					silent: true,
 					options: [ ],
-					env: { },
+					env: { DEPLOY_NAME: entry.id, NODE_ENV: 'production' },
 					cwd: path,
 					logFile: 'xx',
 					outFile: 'yy',
