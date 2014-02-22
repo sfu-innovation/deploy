@@ -61,6 +61,9 @@ function deploy(entry) {
 					child_process.execFile('git', ['clone', '--recursive', '--branch', branch, url], { cwd: path }, next)
 			});
 		},
+		function setup(next) {
+			child_process.execFile('npm', ['install'], { cwd: path }, next);
+		}
 		function spawn(next) {
 			if (monitors[entry.id]) {
 				monitors[entry.id].restart();
@@ -104,6 +107,7 @@ function deploy(entry) {
 
 	// Verifier for github's signature
 	function verify(req, res, buf) {
+		if (!req.headers['x-hub-signature']) return;
 		var signature = req.headers['x-hub-signature'], 
 			hmac = crypto.createHmac('sha1', secret);
 		if (hmac.update(chunk).digest('hex') !== hmac.digest('hex'))
