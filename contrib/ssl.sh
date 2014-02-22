@@ -9,9 +9,10 @@ DAYS=365
 openssl ecparam -name prime256v1 -out curve.pem
 
 # Create the CA
-openssl req -new -x509 \
+openssl req -new -newkey ec:curve.pem -x509 \
 	-days 3650 \
 	-extensions v3_ca \
+	-subj "${SIGNER}" \
 	-keyout ${OUT}/innovate.sfu.ca.key \
 	-out ${OUT}/innovate.ca.crt
 
