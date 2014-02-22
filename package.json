@@ -1,0 +1,11 @@
+{
+	"name": "ca.sfu.innovate",
+	"version": "0.0.1",
+	"author": "Izaak Schroeder <izaak.schroeder@gmail.com>",
+	"repository": {
+
+		},
+	"dependencies": {
+		"http-proxy": ">=1.0.0"
+	}
+}
