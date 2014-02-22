@@ -37,7 +37,7 @@ function find(req) {
 
 // Redirect anything on a non-secure channel to something on a secure one
 http.createServer(function(req, res) {
-	res.writeHead(302, 'https://'+req.headers['host']+req.url);
+	res.writeHead(302, { 'Location': 'https://'+req.headers['host']+req.url });
 	res.end();
 }).listen(80);
 
@@ -58,6 +58,6 @@ https.createServer({
 }).listen(443);
 
 // Drop privileges after listening on 80 and 443 and reading the SSL certificates
-process.initgroups('innovate');
+process.initgroups('innovate', 'innovate');
 process.setgid('innovate');
 process.setuid('innovate');
