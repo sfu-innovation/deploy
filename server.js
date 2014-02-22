@@ -50,6 +50,7 @@ https.createServer({
 	if (proxies.length === 1)
 		return proxies[0].web(req, res);
 	res.writeHead(500);
+	res.end();
 }).on('upgrade', function (req, socket, head) {
 	var proxies = find(req);
 	if (proxies.length === 1)
