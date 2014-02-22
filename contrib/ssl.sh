@@ -2,10 +2,18 @@
 OUT="/etc/ssl/private"
 DOMAIN="innovate.cs.surrey.sfu.ca"
 SUBJECT="/C=CA/ST=British Columbia/L=Vancouver/O=Simon Fraser University/CN=*.${DOMAIN}"
+SIGNER="/C=CA/ST=British Columbia/L=Vancouver/O=Simon Fraser University/CN=Root Authority"
 DAYS=365
 
 # Create the EC parameters
-openssl ecparam -name secp160r2 -out curve.pem
+openssl ecparam -name prime256v1 -out curve.pem
+
+# Create the CA
+openssl req -new -x509 \
+	-days 3650 \
+	-extensions v3_ca \
+	-keyout ${OUT}/innovate.sfu.ca.key \
+	-out ${OUT}/innovate.ca.crt
 
 # Create the CSR
 openssl req -new -newkey ec:curve.pem \
@@ -17,8 +25,7 @@ openssl req -new -newkey ec:curve.pem \
 # Sign the CSR
 openssl x509 -req -days $DAYS \
 	-in ${DOMAIN}.csr \
-	-extensions v3_ca \
-	-signkey ${OUT}/${DOMAIN}.key \
+	-signkey ${OUT}/innovate.sfu.ca.key \
 	-out ${OUT}/${DOMAIN}.crt
 
 # Clean up the CSR
